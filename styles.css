@@ -229,8 +229,8 @@ body.black-page {
     font-family: "Mojang", monospace;
     font-weight: bold;
     font-size: 1rem;
-    color: #DDDDDD;                    /* Red as specified (#DDDDDD) */
-    text-shadow: 0px 0px 0 #550000;
+    color: #000000;                    /* Red as specified (#DDDDDD) */
+    text-shadow: 0px 0px 0 #000000;
     position: relative;
     display: inline-block;
     letter-spacing: 1px;
