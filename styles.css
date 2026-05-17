@@ -212,10 +212,8 @@ body.black-page {
     font-weight: normal;
     font-size: 1rem;
     color: #000000;        /* Same as background – truly invisible */
-    background-color: #000000;
     letter-spacing: 1px;
     text-align: center;
-    user-select: none;
     -webkit-user-select: none;
     pointer-events: none;
 }
@@ -237,12 +235,12 @@ body.black-page {
 .glitch {
     font-family: "Mojang", monospace;
     font-weight: bold;
-    font-size: 2rem;
+    font-size: 1rem;
     color: #DDDDDD;                    /* Red as specified (#DDDDDD) */
-    text-shadow: 2px 2px 0 #550000;
+    text-shadow: 0px 0px 0 #550000;
     position: relative;
     display: inline-block;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
 
     animation: glitch-skew 4s infinite linear alternate-reverse;
 }
