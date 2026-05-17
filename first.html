@@ -9,17 +9,25 @@
 <body class="black-page">
 
     <div class="container">
-        <p class="hidden-text">T<span class="glitch glitch-scramble" id="glitchText" data-text="Replace Text Here">he</span> PrInce<span class="glitch glitch-scramble" id="glitchText" data-text="Replace Text Here">s</span>s in t<span class="glitch glitch-scramble" id="glitchText" data-text="Replace Text Here">he</span> Towe<span class="glitch glitch-scramble" id="glitchText" data-text="Replace Text Here">r</span> th<span class="glitch glitch-scramble" id="glitchText" data-text="Replace Text Here">e</span> rot in hour</p>
+        <p class="hidden-text" id="glitchText" style="color: black;"></p>
         <div class="image-wrapper">
             <img src="images/image.png" alt="Main Image" />
         </div>
-        <span class="glitch glitch-scramble" id="glitchText" data-text="Replace Text Here"></span>
     </div>
 
     <script>
         // ── Minecraft-style letter scramble glitch ──────────────
-        const glitchEl = document.getElementById('glitchText');
-        const originalText = glitchEl.getAttribute('data-text');
+        // Full text: "The prIncess in the tower the rot in hour"
+        // Glitched positions (always scrambling):
+        //   index 1  → h  (T[h]e)
+        //   index 2  → e  (Th[e])
+        //   index 10 → s  (prInce[s]s)
+        //   index 17 → h  (t[h]e)
+        //   index 18 → e  (th[e])
+        //   index 24 → r  (towe[r])
+        //   index 28 → e  (th[e])
+        const text = "The prIncess in the tower the rot in hour";
+        const glitchIndices = new Set([1, 2, 10, 17, 18, 24, 28]);
 
         // Characters used for scrambling (Minecraft-style: letters + symbols)
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*<>?/\\|[]{}~';
@@ -29,21 +37,18 @@
         }
 
         function scrambleText() {
-            // Each character has an independent chance of being scrambled each frame
             let result = '';
-            for (let i = 0; i < originalText.length; i++) {
-                if (originalText[i] === ' ') {
+            for (let i = 0; i < text.length; i++) {
+                if (text[i] === ' ') {
                     result += ' ';
-                } else if (Math.random() < 0.75) {
-                    // 25% chance this character glitches this frame
+                } else if (glitchIndices.has(i)) {
+                    // Always scramble these specific positions
                     result += randomChar();
                 } else {
-                    result += originalText[i];
+                    result += text[i];
                 }
             }
-            glitchEl.textContent = result;
-            // Keep data-text in sync so CSS pseudo-elements also glitch
-            glitchEl.setAttribute('data-text', result);
+            document.getElementById('glitchText').textContent = result;
         }
 
         // Run scramble ~15 times per second for a readable but glitchy feel
