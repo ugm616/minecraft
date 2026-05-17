@@ -13,8 +13,42 @@
         <div class="image-wrapper">
             <img src="images/image.png" alt="Main Image" />
         </div>
-        <span class="glitch" data-text="Replace Text Here"></span>
+        <span class="glitch glitch-scramble" id="glitchText" data-text="Replace Text Here">Replace Text Here</span>
     </div>
+
+    <script>
+        // ── Minecraft-style letter scramble glitch ──────────────
+        const glitchEl = document.getElementById('glitchText');
+        const originalText = glitchEl.getAttribute('data-text');
+
+        // Characters used for scrambling (Minecraft-style: letters + symbols)
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*<>?/\\|[]{}~';
+
+        function randomChar() {
+            return chars[Math.floor(Math.random() * chars.length)];
+        }
+
+        function scrambleText() {
+            // Each character has an independent chance of being scrambled each frame
+            let result = '';
+            for (let i = 0; i < originalText.length; i++) {
+                if (originalText[i] === ' ') {
+                    result += ' ';
+                } else if (Math.random() < 0.25) {
+                    // 25% chance this character glitches this frame
+                    result += randomChar();
+                } else {
+                    result += originalText[i];
+                }
+            }
+            glitchEl.textContent = result;
+            // Keep data-text in sync so CSS pseudo-elements also glitch
+            glitchEl.setAttribute('data-text', result);
+        }
+
+        // Run scramble ~15 times per second for a readable but glitchy feel
+        setInterval(scrambleText, 66);
+    </script>
 
 </body>
 </html>

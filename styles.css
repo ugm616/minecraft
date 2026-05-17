@@ -42,14 +42,14 @@ body {
     gap: 16px;
 
     background-color: rgba(0, 0, 0, 0.60);
-    border: 0px solid #000;
-    outline: 0px solid #000;
+    border: 0px solid #000000;
+    outline: 0px solid #000000;
     padding: 0px 0px;
     min-width: 0px;
 
     box-shadow:
-        inset 0px 0px 0 #000,
-        inset 0px 0px 0 #000;
+        inset 0px 0px 0 #000000,
+        inset 0px 0px 0 #000000;
 }
 
 /* ── Heading ─────────────────────────────────────────────────── */
@@ -206,16 +206,18 @@ body.black-page {
     background-image: none;
 }
 
-/* ── Hidden text – black on black ───────────────────────────── */
+/* ── Hidden text – invisible on black background ────────────── */
 .hidden-text {
     font-family: "Mojang", monospace;
     font-weight: normal;
     font-size: 1rem;
-    color: #000000;
+    color: #000000;        /* Same as background – truly invisible */
+    background-color: #000000;
     letter-spacing: 1px;
     text-align: center;
     user-select: none;
     -webkit-user-select: none;
+    pointer-events: none;
 }
 
 /* ── Image ───────────────────────────────────────────────────── */
@@ -228,20 +230,16 @@ body.black-page {
 
 /* ════════════════════════════════════════════════════════════════
    GLITCH TEXT EFFECT
-   Usage:  <span class="glitch" data-text="Your Text">Your Text</span>
-
-   Variants:
-     .glitch            – green  (default, classic terminal)
-     .glitch.glitch-red – red
-     .glitch.glitch-white – white
+   Usage:  <span class="glitch glitch-scramble" id="glitchText"
+                 data-text="Your Text">Your Text</span>
    ════════════════════════════════════════════════════════════════ */
 
 .glitch {
     font-family: "Mojang", monospace;
     font-weight: bold;
     font-size: 2rem;
-    color: #55ff55;                    /* Minecraft §a green */
-    text-shadow: 2px 2px 0 #005500;
+    color: #DDDDDD;                    /* Red as specified (#DDDDDD) */
+    text-shadow: 2px 2px 0 #550000;
     position: relative;
     display: inline-block;
     letter-spacing: 2px;
@@ -263,16 +261,16 @@ body.black-page {
 
 /* ── Front ghost layer – cyan/blue shift ────────────────────── */
 .glitch::before {
-    color: #55ffff;                    /* Minecraft §b aqua */
+    color: #ff8888;                    /* light red ghost */
     text-shadow: none;
     clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
 
     animation: glitch-top 3s infinite linear;
 }
 
-/* ── Back ghost layer – red/magenta shift ───────────────────── */
+/* ── Back ghost layer – dark red shift ──────────────────────── */
 .glitch::after {
-    color: #ff5555;                    /* Minecraft §c red */
+    color: #aa0000;                    /* dark red ghost */
     text-shadow: none;
     clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
 
@@ -304,12 +302,10 @@ body.black-page {
     2%   { transform: translate(-3px, 0); opacity: 0.9; }
     4%   { transform: translate(3px, 0);  opacity: 1; }
     6%   { transform: translate(0);       opacity: 1; }
-    /* Long quiet period */
     60%  { transform: translate(0);       opacity: 1; }
     62%  { transform: translate(-4px, 0); opacity: 0.8; }
     64%  { transform: translate(4px, 0);  opacity: 1; }
     66%  { transform: translate(0);       opacity: 1; }
-    /* Random blip near end */
     90%  { transform: translate(0);       opacity: 1; }
     91%  { transform: translate(3px, 0);  opacity: 0.7; }
     92%  { transform: translate(0);       opacity: 1; }
@@ -322,7 +318,6 @@ body.black-page {
     2%   { transform: translate(3px, 0);  opacity: 0.9; }
     4%   { transform: translate(-3px, 0); opacity: 1; }
     6%   { transform: translate(0);       opacity: 1; }
-    /* Different timing to top so they're out of phase */
     45%  { transform: translate(0);       opacity: 1; }
     47%  { transform: translate(4px, 0);  opacity: 0.8; }
     49%  { transform: translate(-2px, 0); opacity: 1; }

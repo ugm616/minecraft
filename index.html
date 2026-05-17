@@ -23,37 +23,47 @@
     </div>
 
     <script>
-        // ── Change the password here ──────────────────────────
-        const CORRECT_PASSWORD = "20512";
-        // ─────────────────────────────────────────────────────
+        // Passwords are loaded from passwords.json
+        // The valid password is stored at index 1 in the keys array
+        const PASSWORD_INDEX = 1;
+
+        let validPassword = null;
+
+        fetch('passwords.json')
+            .then(r => r.json())
+            .then(data => { validPassword = data.keys[PASSWORD_INDEX]; })
+            .catch(() => { validPassword = null; });
 
         function checkPassword() {
-            const input = document.getElementById("passwordInput").value;
+            if (validPassword === null) {
+                // Still loading or failed
+                return;
+            }
+            const input = document.getElementById('passwordInput').value;
 
-            if (input === CORRECT_PASSWORD) {
-                window.location.href = "first.html";
+            if (input === validPassword) {
+                window.location.href = 'first.html';
             } else {
-                const errorMsg = document.getElementById("errorMsg");
-                const inputEl  = document.getElementById("passwordInput");
+                const errorMsg = document.getElementById('errorMsg');
+                const inputEl  = document.getElementById('passwordInput');
 
-                errorMsg.classList.add("visible");
-                inputEl.classList.add("shake");
+                errorMsg.classList.add('visible');
+                inputEl.classList.add('shake');
 
-                // Remove shake animation so it can replay next attempt
-                inputEl.addEventListener("animationend", () => {
-                    inputEl.classList.remove("shake");
+                inputEl.addEventListener('animationend', () => {
+                    inputEl.classList.remove('shake');
                 }, { once: true });
             }
         }
 
         // Allow pressing Enter key to submit
-        document.getElementById("passwordInput").addEventListener("keydown", function (e) {
-            if (e.key === "Enter") checkPassword();
+        document.getElementById('passwordInput').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') checkPassword();
         });
 
         // Hide error when the user starts typing again
-        document.getElementById("passwordInput").addEventListener("input", function () {
-            document.getElementById("errorMsg").classList.remove("visible");
+        document.getElementById('passwordInput').addEventListener('input', function () {
+            document.getElementById('errorMsg').classList.remove('visible');
         });
     </script>
 
