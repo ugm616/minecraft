@@ -210,7 +210,7 @@ body.black-page {
 .hidden-text {
     font-family: "Mojang", monospace;
     font-weight: normal;
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: #000000;
     letter-spacing: 1px;
     text-align: center;
