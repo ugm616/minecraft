@@ -208,14 +208,7 @@ body.black-page {
 
 /* ── Hidden text – invisible on black background ────────────── */
 .hidden-text {
-    font-family: "Mojang", monospace;
-    font-weight: normal;
-    font-size: 1rem;
-    color: #000000;        /* Same as background – truly invisible */
-    letter-spacing: 1px;
-    text-align: center;
-    -webkit-user-select: none;
-    pointer-events: none;
+    color: #000000;
 }
 
 /* ── Image ───────────────────────────────────────────────────── */
