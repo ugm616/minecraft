@@ -23,8 +23,6 @@
     </div>
 
     <script>
-        // Passwords are loaded from passwords.json
-        // The valid password is stored at index 1 in the keys array
         const PASSWORD_INDEX = 1;
 
         let validPassword = null;
@@ -36,7 +34,6 @@
 
         function checkPassword() {
             if (validPassword === null) {
-                // Still loading or failed
                 return;
             }
             const input = document.getElementById('passwordInput').value;
@@ -58,12 +55,10 @@
             }
         }
 
-        // Allow pressing Enter key to submit
         document.getElementById('passwordInput').addEventListener('keydown', function (e) {
             if (e.key === 'Enter') checkPassword();
         });
 
-        // Hide error when the user starts typing again
         document.getElementById('passwordInput').addEventListener('input', function () {
             document.getElementById('errorMsg').classList.remove('visible');
         });
