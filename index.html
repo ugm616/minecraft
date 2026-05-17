@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Password</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Enter Password</h1>
+
+        <div class="input-wrapper">
+            <input type="password" id="passwordInput" placeholder="Password..." autocomplete="off" />
+        </div>
+
+        <button class="mc-button" id="enterBtn" onclick="checkPassword()">
+            <span>Enter</span>
+        </button>
+
+        <p id="errorMsg" class="error-msg">Incorrect password. Please try again.</p>
+    </div>
+
+    <script>
+        // ── Change the password here ──────────────────────────
+        const CORRECT_PASSWORD = "20512";
+        // ─────────────────────────────────────────────────────
+
+        function checkPassword() {
+            const input = document.getElementById("passwordInput").value;
+
+            if (input === CORRECT_PASSWORD) {
+                window.location.href = "first.html";
+            } else {
+                const errorMsg = document.getElementById("errorMsg");
+                const inputEl  = document.getElementById("passwordInput");
+
+                errorMsg.classList.add("visible");
+                inputEl.classList.add("shake");
+
+                // Remove shake animation so it can replay next attempt
+                inputEl.addEventListener("animationend", () => {
+                    inputEl.classList.remove("shake");
+                }, { once: true });
+            }
+        }
+
+        // Allow pressing Enter key to submit
+        document.getElementById("passwordInput").addEventListener("keydown", function (e) {
+            if (e.key === "Enter") checkPassword();
+        });
+
+        // Hide error when the user starts typing again
+        document.getElementById("passwordInput").addEventListener("input", function () {
+            document.getElementById("errorMsg").classList.remove("visible");
+        });
+    </script>
+
+</body>
+</html>
