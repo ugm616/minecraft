@@ -1,0 +1,307 @@
+/* ── Fonts ───────────────────────────────────────────────────── */
+@font-face {
+    font-family: "Mojang";
+    src: url("../fonts/Mojang-Bold.ttf") format("truetype");
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: "Mojang";
+    src: url("../fonts/Mojang-Regular.ttf") format("truetype");
+    font-weight: normal;
+}
+
+/* ── Reset / Base ────────────────────────────────────────────── */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   INDEX.HTML – Password Page
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── Body – Minecraft dirt/stone background ──────────────────── */
+body {
+    font-family: "Mojang", monospace;
+    font-weight: normal;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #000000;
+}
+
+/* ── Container – the dark GUI panel ─────────────────────────── */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+
+    background-color: rgba(0, 0, 0, 0.60);
+    border: 0px solid #000000;
+    outline: 0px solid #000000;
+    padding: 0px 0px;
+    min-width: 0px;
+
+    box-shadow:
+        inset 0px 0px 0 #000000,
+        inset 0px 0px 0 #000000;
+}
+
+/* ── Heading ─────────────────────────────────────────────────── */
+h1 {
+    font-family: "Mojang", monospace;
+    font-weight: bold;
+    font-size: 2rem;
+    color: #ffffff;
+
+    text-shadow:
+        3px 3px 0 #3f3f3f,
+        -1px -1px 0 #3f3f3f;
+
+    letter-spacing: 1px;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+/* ── Password Input ──────────────────────────────────────────── */
+.input-wrapper {
+    width: 100%;
+}
+
+input[type="password"] {
+    font-family: "Mojang", monospace;
+    font-weight: normal;
+    font-size: 0.95rem;
+    color: #ffffff;
+
+    width: 100%;
+    padding: 10px 12px;
+
+    background-color: #000000;
+    border: none;
+    outline: none;
+
+    box-shadow:
+        inset 1px 1px 0 #ffffff,
+        inset -1px -1px 0 #ffffff,
+        inset 2px 2px 0 #555555,
+        inset -2px -2px 0 #555555;
+
+    caret-color: #ffffff;
+    letter-spacing: 1px;
+}
+
+input[type="password"]::placeholder {
+    color: #666666;
+}
+
+input[type="password"]:focus {
+    box-shadow:
+        inset 1px 1px 0 #ffffff,
+        inset -1px -1px 0 #ffffff,
+        inset 2px 2px 0 #aaaaff,
+        inset -2px -2px 0 #aaaaff;
+}
+
+/* ── Minecraft Button ─────────────────────────────────────────── */
+.mc-button {
+    font-family: "Mojang", monospace;
+    font-weight: normal;
+    font-size: 1rem;
+    color: #ffffff;
+    text-shadow: 1px 1px 0 #3f3f3f;
+
+    width: 100%;
+    padding: 10px 0;
+
+    background-color: #8b8b8b;
+    border: none;
+    outline: none;
+    cursor: pointer;
+
+    box-shadow:
+        0 0 0 2px #1a1a1a,
+        inset  3px  3px 0 #c6c6c6,
+        inset -3px -3px 0 #373737,
+        inset  5px  5px 0 #a0a0a0,
+        inset -5px -5px 0 #595959;
+
+    letter-spacing: 1px;
+    image-rendering: pixelated;
+    transition: background-color 0.05s;
+
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.mc-button:hover {
+    background-color: #9898c8;
+    color: #ffffa0;
+    text-shadow: 1px 1px 0 #3f3f3f;
+
+    box-shadow:
+        0 0 0 2px #1a1a1a,
+        inset  3px  3px 0 #d4d4ff,
+        inset -3px -3px 0 #2a2a4a,
+        inset  5px  5px 0 #b8b8e8,
+        inset -5px -5px 0 #4a4a7a;
+}
+
+.mc-button:active {
+    background-color: #7a7a7a;
+
+    box-shadow:
+        0 0 0 2px #1a1a1a,
+        inset  3px  3px 0 #373737,
+        inset -3px -3px 0 #c6c6c6,
+        inset  5px  5px 0 #595959,
+        inset -5px -5px 0 #a0a0a0;
+}
+
+/* ── Error Message ────────────────────────────────────────────── */
+.error-msg {
+    font-family: "Mojang", monospace;
+    font-weight: normal;
+    font-size: 0.85rem;
+    color: #ff5555;
+    text-shadow: 1px 1px 0 #7a0000;
+    text-align: center;
+
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.error-msg.visible {
+    opacity: 1;
+}
+
+/* ── Shake animation on wrong password ───────────────────────── */
+@keyframes shake {
+    0%   { transform: translateX(0); }
+    15%  { transform: translateX(-6px); }
+    30%  { transform: translateX(6px); }
+    45%  { transform: translateX(-5px); }
+    60%  { transform: translateX(5px); }
+    75%  { transform: translateX(-3px); }
+    90%  { transform: translateX(3px); }
+    100% { transform: translateX(0); }
+}
+
+.shake {
+    animation: shake 0.4s ease;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FIRST.HTML – Black page
+   ════════════════════════════════════════════════════════════════ */
+
+.black-page body,
+body.black-page {
+    background-color: #000000;
+    background-image: none;
+}
+
+/* ── Hidden text – invisible on black background ────────────── */
+.hidden-text {
+    color: #000000;
+}
+
+/* ── Image ───────────────────────────────────────────────────── */
+.image-wrapper img {
+    display: block;
+    max-width: 90vw;
+    max-height: 75vh;
+    object-fit: contain;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   GLITCH TEXT EFFECT
+   ════════════════════════════════════════════════════════════════ */
+
+.glitch {
+    font-family: "Mojang", monospace;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #000000;
+    text-shadow: 0px 0px 0 #000000;
+    position: relative;
+    display: inline-block;
+    letter-spacing: 1px;
+
+    animation: glitch-skew 4s infinite linear alternate-reverse;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.glitch::before {
+    color: #ff8888;
+    text-shadow: none;
+    clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+    animation: glitch-top 3s infinite linear;
+}
+
+.glitch::after {
+    color: #aa0000;
+    text-shadow: none;
+    clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+    animation: glitch-bottom 3.5s infinite linear;
+}
+
+.glitch.glitch-red          { color: #ff5555; text-shadow: 2px 2px 0 #550000; }
+.glitch.glitch-white        { color: #ffffff; text-shadow: 2px 2px 0 #555555; }
+.glitch.glitch-yellow       { color: #ffff55; text-shadow: 2px 2px 0 #555500; }
+.glitch.glitch-gold         { color: #ffaa00; text-shadow: 2px 2px 0 #553600; }
+
+@keyframes glitch-skew {
+    0%   { transform: skewX(0deg); }
+    10%  { transform: skewX(-1deg); }
+    20%  { transform: skewX(0deg); }
+    70%  { transform: skewX(0deg); }
+    80%  { transform: skewX(1deg); }
+    90%  { transform: skewX(0deg); }
+    100% { transform: skewX(0deg); }
+}
+
+@keyframes glitch-top {
+    0%   { transform: translate(0); opacity: 1; }
+    2%   { transform: translate(-3px, 0); opacity: 0.9; }
+    4%   { transform: translate(3px, 0);  opacity: 1; }
+    6%   { transform: translate(0);       opacity: 1; }
+    60%  { transform: translate(0);       opacity: 1; }
+    62%  { transform: translate(-4px, 0); opacity: 0.8; }
+    64%  { transform: translate(4px, 0);  opacity: 1; }
+    66%  { transform: translate(0);       opacity: 1; }
+    90%  { transform: translate(0);       opacity: 1; }
+    91%  { transform: translate(3px, 0);  opacity: 0.7; }
+    92%  { transform: translate(0);       opacity: 1; }
+    100% { transform: translate(0);       opacity: 1; }
+}
+
+@keyframes glitch-bottom {
+    0%   { transform: translate(0); opacity: 1; }
+    2%   { transform: translate(3px, 0);  opacity: 0.9; }
+    4%   { transform: translate(-3px, 0); opacity: 1; }
+    6%   { transform: translate(0);       opacity: 1; }
+    45%  { transform: translate(0);       opacity: 1; }
+    47%  { transform: translate(4px, 0);  opacity: 0.8; }
+    49%  { transform: translate(-2px, 0); opacity: 1; }
+    51%  { transform: translate(0);       opacity: 1; }
+    85%  { transform: translate(0);       opacity: 1; }
+    86%  { transform: translate(-4px, 0); opacity: 0.7; }
+    87%  { transform: translate(0);       opacity: 1; }
+    100% { transform: translate(0);       opacity: 1; }
+}

@@ -4,7 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ── 404 page specific ── */
+        body {
+            background-color: #000000;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        #quartz-img {
+            display: block;
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            image-rendering: pixelated;
+        }
+
+        /* ── Modal overlay ── */
+        #modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+
+        #modal-box {
+            background-color: #3c3c3c;
+            border: none;
+            outline: none;
+            padding: 32px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            min-width: 280px;
+
+            box-shadow:
+                0 0 0 3px #1a1a1a,
+                inset  3px  3px 0 #5a5a5a,
+                inset -3px -3px 0 #222222;
+        }
+
+        #modal-box p {
+            font-family: "Mojang", monospace;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 0 #3f3f3f;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+    </style>
 </head>
 <body>
+
+    <!-- Access modal -->
+    <div id="modal-overlay">
+        <div id="modal-box">
+            <p>Want to Access the Page?</p>
+            <button class="mc-button" id="accessBtn" onclick="grantAccess()">
+                <span>Yes</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Page content -->
+    <img id="quartz-img" src="quartz.png" alt="" />
+
+    <!-- Hidden looping audio -->
+    <audio id="bgAudio" src="audio.mp3" loop preload="auto"></audio>
+
+    <script>
+        function grantAccess() {
+            // Dismiss modal
+            document.getElementById('modal-overlay').style.display = 'none';
+
+            // Start audio (user gesture allows this)
+            const audio = document.getElementById('bgAudio');
+            audio.play().catch(() => {
+                // Autoplay still blocked – silently ignore
+            });
+        }
+    </script>
+
 </body>
 </html>
