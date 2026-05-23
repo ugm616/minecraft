@@ -198,7 +198,7 @@
       const cell = canvasSize / 3;
       // Hit radius matches the visual dot size (~10px at 288px grid),
       // so a dot only activates when the pointer is directly over it.
-      const hitRadius = cell * 0.14;
+      const hitRadius = cell * 0.28;
       for (const d of dots) {
         const c = dotCenter(d.row, d.col);
         if (Math.hypot(x - c.x, y - c.y) < hitRadius) return `${d.row},${d.col}`;
