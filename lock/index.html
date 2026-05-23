@@ -4,52 +4,43 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>Lock Screen</title>
+  <link rel="stylesheet" href="styles.css" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+    /* ── Lock-screen specific additions ── */
     body {
-      background: #0f0f1a;
-      min-height: 100vh;
-      display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Segoe UI', sans-serif;
-      color: #e0e0e0;
+      gap: 0;
+      touch-action: none;
       user-select: none;
       -webkit-user-select: none;
-      touch-action: none;
-    }
-
-    h1 {
-      font-size: clamp(1.2rem, 4vw, 1.8rem);
-      font-weight: 300;
-      letter-spacing: 0.15em;
-      margin-bottom: 1.5rem;
-      opacity: 0.75;
     }
 
     #status {
-      height: 1.8rem;
-      font-size: clamp(0.85rem, 3vw, 1rem);
-      margin-bottom: 1.2rem;
-      letter-spacing: 0.05em;
-      transition: color 0.2s;
+      font-family: "Mojang", monospace;
+      font-size: 0.9rem;
+      height: 1.6rem;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+      text-align: center;
+      text-shadow: 1px 1px 0 #3f3f3f;
     }
+
+    #status.success { color: #55ff55; }
+    #status.error   { color: #ff5555; text-shadow: 1px 1px 0 #7a0000; }
 
     #lock-wrapper {
       position: relative;
-      width: min(80vw, 80vh, 320px);
-      height: min(80vw, 80vh, 320px);
+      width: min(72vw, 72vh, 288px);
+      height: min(72vw, 72vh, 288px);
+      margin-bottom: 20px;
     }
 
     #line-canvas {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       pointer-events: none;
+      image-rendering: pixelated;
     }
 
     #dot-grid {
@@ -66,56 +57,66 @@
       justify-content: center;
     }
 
+    /* Minecraft-style square dots */
     .dot {
-      width: clamp(18px, 5vw, 22px);
-      height: clamp(18px, 5vw, 22px);
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.15);
-      border: 2px solid rgba(255, 255, 255, 0.45);
-      transition: background 0.15s, border-color 0.15s, transform 0.15s;
+      width: clamp(16px, 4.5vw, 20px);
+      height: clamp(16px, 4.5vw, 20px);
+      background-color: #555555;
+      box-shadow:
+        inset 1px 1px 0 #888888,
+        inset -1px -1px 0 #333333;
+      transition: background-color 0.1s, transform 0.1s;
       pointer-events: none;
+      image-rendering: pixelated;
     }
 
     .dot.active {
-      background: #4fc3f7;
-      border-color: #81d4fa;
-      transform: scale(1.4);
-      box-shadow: 0 0 10px rgba(79, 195, 247, 0.6);
+      background-color: #aaaaff;
+      box-shadow:
+        inset 1px 1px 0 #ddddff,
+        inset -1px -1px 0 #4444aa;
+      transform: scale(1.35);
     }
 
     .dot.success {
-      background: #66bb6a;
-      border-color: #a5d6a7;
-      transform: scale(1.4);
-      box-shadow: 0 0 10px rgba(102, 187, 106, 0.6);
+      background-color: #55ff55;
+      box-shadow:
+        inset 1px 1px 0 #aaffaa,
+        inset -1px -1px 0 #007700;
+      transform: scale(1.35);
     }
 
     .dot.error {
-      background: #ef5350;
-      border-color: #ef9a9a;
-      transform: scale(1.4);
-      box-shadow: 0 0 10px rgba(239, 83, 80, 0.6);
+      background-color: #ff5555;
+      box-shadow:
+        inset 1px 1px 0 #ffaaaa,
+        inset -1px -1px 0 #770000;
+      transform: scale(1.35);
     }
 
     #hint {
-      margin-top: 1.5rem;
-      font-size: clamp(0.7rem, 2.5vw, 0.85rem);
-      opacity: 0.35;
-      letter-spacing: 0.05em;
+      font-family: "Mojang", monospace;
+      font-size: 0.75rem;
+      color: #666666;
+      letter-spacing: 1px;
+      text-align: center;
+      margin-top: 4px;
     }
   </style>
 </head>
 <body>
 
-  <h1>&#128274; Enter Pattern</h1>
-  <div id="status"></div>
+  <div class="container">
+    <h1>&#128274; Enter Pattern</h1>
+    <div id="status"></div>
 
-  <div id="lock-wrapper">
-    <canvas id="line-canvas"></canvas>
-    <div id="dot-grid"></div>
+    <div id="lock-wrapper">
+      <canvas id="line-canvas"></canvas>
+      <div id="dot-grid"></div>
+    </div>
+
+    <p id="hint">Draw the unlock pattern</p>
   </div>
-
-  <p id="hint">Draw the unlock pattern</p>
 
   <script>
     // -- State --
@@ -124,8 +125,8 @@
     let userPattern    = [];
     let isDrawing      = false;
     let currentMouse   = { x: 0, y: 0 };
-    let dots           = [];          // { row, col, el }
-    let canvasSize     = 320;
+    let dots           = [];
+    let canvasSize     = 288;
     let locked         = false;
 
     const canvas   = document.getElementById('line-canvas');
@@ -144,7 +145,7 @@
         resizeCanvas();
       })
       .catch(() => {
-        statusEl.style.color = '#ef5350';
+        statusEl.className = 'error';
         statusEl.textContent = 'Failed to load pattern.json';
       });
 
@@ -198,8 +199,7 @@
       const hitRadius = cell * 0.42;
       for (const d of dots) {
         const c = dotCenter(d.row, d.col);
-        const dist = Math.hypot(x - c.x, y - c.y);
-        if (dist < hitRadius) return `${d.row},${d.col}`;
+        if (Math.hypot(x - c.x, y - c.y) < hitRadius) return `${d.row},${d.col}`;
       }
       return null;
     }
@@ -213,36 +213,21 @@
       };
     }
 
-    // -- Drawing --
+    // -- Drawing -- pixelated/sharp lines to match MC aesthetic
     function redraw(mode) {
       ctx.clearRect(0, 0, canvasSize, canvasSize);
       if (userPattern.length < 1) return;
 
-      let lineColor, glowColor;
-      if (mode === 'success') {
-        lineColor = 'rgba(102, 187, 106, 0.85)';
-        glowColor = 'rgba(102, 187, 106, 0.35)';
-      } else if (mode === 'error') {
-        lineColor = 'rgba(239, 83, 80, 0.85)';
-        glowColor = 'rgba(239, 83, 80, 0.35)';
-      } else {
-        lineColor = 'rgba(79, 195, 247, 0.8)';
-        glowColor = 'rgba(79, 195, 247, 0.25)';
-      }
-
-      ctx.save();
-      ctx.strokeStyle = glowColor;
-      ctx.lineWidth   = 10;
-      ctx.lineCap     = 'round';
-      ctx.lineJoin    = 'round';
-      tracePath();
-      ctx.restore();
+      let lineColor;
+      if      (mode === 'success') lineColor = 'rgba(85, 255, 85, 0.85)';
+      else if (mode === 'error')   lineColor = 'rgba(255, 85, 85, 0.85)';
+      else                         lineColor = 'rgba(170, 170, 255, 0.85)';
 
       ctx.save();
       ctx.strokeStyle = lineColor;
       ctx.lineWidth   = 3;
-      ctx.lineCap     = 'round';
-      ctx.lineJoin    = 'round';
+      ctx.lineCap     = 'square';   // pixelated square caps
+      ctx.lineJoin    = 'miter';
       tracePath();
       ctx.restore();
     }
@@ -282,6 +267,7 @@
       dots.forEach(d => d.el.className = 'dot');
       ctx.clearRect(0, 0, canvasSize, canvasSize);
       statusEl.textContent = '';
+      statusEl.className   = '';
       activateDot(key);
       redraw();
     }
@@ -307,7 +293,7 @@
       const correct = JSON.stringify(userPattern) === JSON.stringify(correctPattern);
       if (correct) {
         locked = true;
-        statusEl.style.color = '#66bb6a';
+        statusEl.className   = 'success';
         statusEl.textContent = '\u2713 Unlocked!';
         dots.forEach(d => {
           if (d.el.classList.contains('active')) {
@@ -318,7 +304,7 @@
         redraw('success');
         setTimeout(() => { window.location.href = redirectUrl; }, 600);
       } else {
-        statusEl.style.color = '#ef5350';
+        statusEl.className   = 'error';
         statusEl.textContent = '\u2717 Wrong pattern';
         dots.forEach(d => {
           if (d.el.classList.contains('active')) {
@@ -327,6 +313,10 @@
           }
         });
         redraw('error');
+        // Shake the container
+        const c = document.querySelector('.container');
+        c.classList.add('shake');
+        c.addEventListener('animationend', () => c.classList.remove('shake'), { once: true });
         setTimeout(reset, 1000);
       }
     }
@@ -336,6 +326,7 @@
       isDrawing    = false;
       locked       = false;
       statusEl.textContent = '';
+      statusEl.className   = '';
       dots.forEach(d => { d.el.className = 'dot'; });
       ctx.clearRect(0, 0, canvasSize, canvasSize);
     }
