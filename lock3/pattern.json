@@ -1,8 +1,8 @@
 {
   "grid": [
-    [2, 0, 4],
-    [0, 3, 0],
+    [3, 0, 7],
+    [2, 4, 6],
     [1, 0, 5]
   ],
-  "redirect": "../index.html"
+  "redirect": "https://www.youtube.com/watch?v=_xJcE9tnY6E"
 }
